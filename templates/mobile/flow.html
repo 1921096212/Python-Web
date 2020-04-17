@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <script type="text/javascript" src="../../static/js/base/message.js"></script>
+    <script type="text/javascript" src="../../static/js/mobile/waterfall.js"></script>
+
+    <title></title>
+    <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #main {
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 70px;
+        }
+
+        .pin {
+            padding: 15px 0 0 15px;
+            float: left;
+        }
+
+        .box {
+            padding: 10px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 6px #ccc;
+            border-radius: 5px;
+        }
+
+        .box img {
+            width: 370px;
+            height: auto;
+        }
+
+        .div-bottom {
+            position: fixed;
+            bottom: 0;
+        }
+        .btn-more {
+            display: block;
+            border: none;
+            width: 400px;
+            line-height: 40px;
+            text-align: center;
+            background: skyblue;
+            color: #efefef;
+            margin: 20px auto;
+        }
+
+        .btn-more:hover {
+            background: #54b9e2;
+        }
+
+    </style>
+</head>
+<body>
+<div id="main">
+</div>
+<div class="div-bottom">
+    <a href="javascript:void(0);" class="btn-more">加载更多</a>
+    <input type="text" placeholder="页码" name="password" class="form-control">
+</div>
+
+</body>
+</html>

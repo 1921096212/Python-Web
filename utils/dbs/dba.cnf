@@ -1,0 +1,7 @@
+[client]
+database = my_new
+user = xiaohong
+password = xiaohong
+host = 172.27.0.17
+port = 3306
+default-character-set = utf8

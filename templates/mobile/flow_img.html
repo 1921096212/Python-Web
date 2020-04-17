@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../static/css/mobile/dropload.css">
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <script src="../../static/js/mobile/dropload.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+    $('.element').dropload({
+        scrollArea: window,
+        loadDownFn: function (me) {
+            $.ajax({
+                type: 'GET',
+                url: 'json/more.json',
+                dataType: 'json',
+                success: function (data) {
+                    alert(data);
+                    // 每次数据加载完，必须重置
+                    me.resetload();
+                },
+                error: function (xhr, type) {
+                    alert('Ajax error!');
+                    // 即使加载出错，也得重置
+                    me.resetload();
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

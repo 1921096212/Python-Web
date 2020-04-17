@@ -1,0 +1,35 @@
+{% extends 'base/base.html' %}
+
+{% block link %}
+    <link rel="stylesheet" href="../../static/css/course/course.css">
+
+{% endblock %}
+
+{% block title %}在线课堂{% endblock %}
+
+{% block main-contain %}
+    <main id="course-container">
+        <div class="w1200">
+            <ul class="course-list">
+                {% for one_course in courses %}
+                    <li class="course-item">
+                        <a href="{% url 'courses:detail' one_course.id %}">
+                            <img class="course-img" src="{{ one_course.cover_url }}"
+                                 alt="图片丢失" width="200px" height="200px">
+                            <div class="course-content">
+                                <p class="course-info">{{ one_course.title }}</p>
+{#                                <p class="course-author">#}
+{#                                    {{ one_course.teacher.name }}{{ one_course.teacher.teacher__positional_title }}</p>#}
+{#                                <p class="course-price free">免费</p>#}
+                            </div>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </main>
+
+{% endblock %}
+
+{% block side %}
+{% endblock %}

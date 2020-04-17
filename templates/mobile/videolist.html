@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+<link rel="stylesheet" href="https://youku.haokzy-tudou.com/html/dplayer/DPlayer.min.css"/>
+</head>
+<body style="background: #f3f3f3">
+<ul class="course-list" style="list-style: none; display: flex; flex-flow: row wrap; padding-left: 0px;">
+    {% for one_course in courses %}
+        <li style="position: relative; margin: 20px; ">
+            <div style="background: white;padding: 10px 10px 10px 10px; width: 400px">
+                <a href="{{ one_course.video_url }}">
+                    <img src="{{ one_course.cover_url }}" alt="" width="400px" height="560px">
+                </a>
+                <p style="margin-top: 0; margin-bottom: 0;font-size: 35px; color: #474747;">{{ one_course.title }}</p>
+                {#                <p style="margin-top: 0; margin-bottom: 0; font-size: 30px; color: #474747;">{{ one_course.profile }}</p>#}
+            </div>
+        </li>
+    {% endfor %}
+</ul>
+<script src="https://youku.haokzy-tudou.com/html/dplayer/hls.min.js"></script>
+<script src="{% static 'js/mobile/DPlayer.min.js' %}"></script>
+<div id="dplayer"></div>
+<script>
+    const dp = new DPlayer({
+        container: document.getElementById('dplayer'),
+        video: {
+            url: 'https://youku.haokzy-tudou.com/ppvod/jQYxoGwN.m3u8',
+        },
+    });
+</script>
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+{#    <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui" charset="UTF-8">#}
+    <title>加载底部</title>
+    <!-- UC强制全屏 -->
+    <meta name="full-screen" content="yes">
+    <!-- QQ强制全屏 -->
+    <meta name="x5-fullscreen" content="true">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            -webkit-text-size-adjust: none;
+        }
+
+        html {
+            font-size: 10px;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            font-size: 1.2em;
+        }
+
+        .header {
+            height: 44px;
+            line-height: 44px;
+            border-bottom: 1px solid #ccc;
+            background-color: #eee;
+        }
+
+        .header h1 {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: normal;
+        }
+
+        .content {
+            margin: 0 auto;
+            background-color: #fff;
+        }
+
+        .content .item {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            -webkit-box-align: center;
+            box-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+            padding: 3.125%;
+            border-bottom: 1px solid #ddd;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .content .item img {
+            display: block;
+            width: auto;
+            height: auto;
+            border: 1px solid #ddd;
+        }
+
+
+        .pin {
+            padding: 15px 0 0 15px;
+            float: left;
+        }
+
+        .box {
+            padding: 10px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 6px #ccc;
+            border-radius: 5px;
+        }
+
+        .box img {
+            width: 370px;
+            height: auto;
+        }
+
+        .opacity {
+            -webkit-animation: opacity 0.3s linear;
+            animation: opacity 0.3s linear;
+        }
+
+        @-webkit-keyframes opacity {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes opacity {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        #s{
+            width: 30px;
+            height: 30px;
+            background: #00aaaa;
+        }
+
+
+    </style>
+    <link rel="stylesheet" href="../../static/css/mobile/dropload.css">
+</head>
+<body>
+
+<!-- http://www.jq22.com/jquery-info6960 -->
+<div class="header">
+    <h1>就当我是新闻页吧</h1>
+</div>
+
+<div class="content">
+    <div class="lists"></div>
+</div>
+
+<div id="main">
+</div>
+
+<div id="s">刷新</div>
+
+<!-- jQuery1.7以上 或者 Zepto 二选一，不要同时都引用 -->
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<script type="text/javascript" src="../../static/js/base/message.js"></script>
+<script src="../../static/js/mobile/dropload.min.js"></script>
+<script>
+    $(function () {
+        // 页数
+        var iPage = 1;
+        // 每页展示5个
+        var size = 5;
+        // dropload
+        $('.content').dropload({
+            scrollArea: window,
+            loadDownFn: function (me) {
+                let sDataParams = {
+                    "page": iPage++
+                };
+                $.ajax({
+                    url: "/mobile/flowImageApi",  // url尾部需要添加/
+                    type: "GET",
+                    data: sDataParams,
+                    dataType: "json",
+                })
+                    .done(function (res) {
+                        if (res.errno === "0") {
+                            iTotalPage = res.data.total_pages;  // 后端传过来的总页数
+
+                            // 遍历值
+                            $.each(res.data.news, function (index, value) {
+                                var $oPin = $('<div>').addClass('pin').appendTo($("#main"));
+                                var $oBox = $('<div>').addClass('box').appendTo($oPin);
+                                $('<img>').attr('src', '' + $(value).attr('image_url')).appendTo($oBox);
+                            });
+
+                            // 为了测试，延迟1秒加载
+                            setTimeout(function () {
+                                waterfall();
+                                // 每次数据插入，必须重置
+                                me.resetload();
+                                message.showInfo('加载完成');
+                            }, 500);
+
+                        } else {
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                            message.showInfo(res);
+                        }
+                    })
+                    .fail(function () {
+                        // 即使加载出错，也得重置
+                        me.resetload();
+                        message.showInfo(res);
+                    });
+
+            }
+        });
+
+
+
+        /*
+        parend 父级id
+        pin 元素id
+        */
+        function waterfall(parent, pin) {
+            var $aPin = $("#main>div");
+            var iPinW = $aPin.eq(0).width();// 一个块框pin的宽
+            var num = Math.floor($(window).width() / iPinW);//每行中能容纳的pin个数【窗口宽度除以一个块框宽度】
+            //oParent.style.cssText='width:'+iPinW*num+'px;ma rgin:0 auto;';//设置父级居中样式：定宽+自动水平外边距
+            $("#main").css({
+                'width:': iPinW * num,
+                'margin': '0 auto'
+            });
+
+            var pinHArr = [];//用于存储 每列中的所有块框相加的高度。
+
+            $aPin.each(function (index, value) {
+                var pinH = $aPin.eq(index).height();
+                if (index < num) {
+                    pinHArr[index] = pinH; //第一行中的num个块框pin 先添加进数组pinHArr
+                } else {
+                    var minH = Math.min.apply(null, pinHArr);//数组pinHArr中的最小值minH
+                    var minHIndex = $.inArray(minH, pinHArr);
+                    $(value).css({
+                        'position': 'absolute',
+                        'top': minH + 15,
+                        'left': $aPin.eq(minHIndex).position().left,
+                    });
+                    //数组 最小高元素的高 + 添加上的aPin[i]块框高
+                    pinHArr[minHIndex] += $aPin.eq(index).height() + 15;//更新添加了块框后的列高
+                }
+            });
+        }
+
+    });
+</script>
+</body>
+</html>

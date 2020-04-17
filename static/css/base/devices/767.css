@@ -1,0 +1,12 @@
+/*------------------------------------------------------------------*/ 
+/*	2) Note: Design for a width of 480 px
+/*------------------------------------------------------------------*/
+@media only screen and (min-width: 480px) and (max-width: 1170px) {
+    .mw1200 {
+        width: 1170px;
+        background: #4a4a4a;
+    }
+    #footer {
+    width: 1170px;
+}
+}

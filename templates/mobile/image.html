@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        * {
+            padding: 0px;
+            margin: 0px;
+            list-style: none;
+            font-style: normal;
+            font-family: arial;
+            font-family: Microsoft YaHei, arial;
+        }
+
+        .twoRankedBox {
+            margin: 6px 8px;
+            overflow: hidden;
+            padding-bottom: 25px;
+        }
+
+        .twoRankedBox ul {
+            width: 49%;
+            float: left;
+        }
+
+        .twoRankedBox ul:last-child {
+            margin-left: 2%;
+        }
+
+        .twoRankedBox ul li {
+            padding: 5px;
+            margin-bottom: 6px;
+            padding-bottom: 8px;
+            background-color: #FFFFFF;
+        }
+
+        .twoRankedBox ul li p:first-child {
+            padding-top: 0px;
+        }
+
+        .twoRankedBox ul li p {
+            padding-top: 4px;
+        }
+
+        .product_picture img {
+            display: block;
+            width: 100%;
+        }
+
+        .product_np {
+            overflow: hidden;
+            line-height: 20px;
+        }
+
+        .product_np a {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .product_np a:first-child {
+            font-size: 0.9em;
+            color: #58b7e3;
+            width: 65%;
+            float: left;
+        }
+
+        .product_np a:last-child {
+            font-size: 0.8em;
+            color: #f00;
+            float: right;
+            width: 35%;
+            text-align: right;
+        }
+
+        .product_ie {
+            font-size: 0.8em;
+            color: #777;
+        }
+    </style>
+</head>
+<body style="background-color: #f3f3f3;">
+<!-- 商品列表 -->
+<div class="twoRankedBox">
+    <ul class="BoxLeft">
+    </ul>
+    <ul class="BoxRight">
+    </ul>
+</div>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<script src="{% static 'js/commons.js' %}"></script>
+<script type="text/javascript">
+
+    var jsons = {};
+
+    let sDataParams = {
+        "page": iPage
+    };
+    $.ajax({
+        url: "/mobile/flowImageApi/",  // url尾部需要添加/
+        // 请求方式
+        type: "GET",
+        data: sDataParams,
+        dataType: "json",
+    })
+        .done(function (res) {
+            if (res.errno === "0") {
+                iTotalPage = res.data.total_pages;  // 后端传过来的总页数
+                jsons = res.data.news;
+            } else {
+                message.showError(res.errmsg); // 登录失败，打印错误信息
+            }
+        })
+        .fail(function () {
+            message.showError('服务器超时，请重试！');
+        });
+
+    //模拟数据导入
+    for (var i = 0; i < json.length; i++) {
+        var chtml = '<li><p class="product_picture"><img src="' + jsons.image_url + '"></p>'
+            + '<p class="product_np"><a>' + json.data[i].name + '</a><a>￥' + json.data[i].price + '</a></p>'
+            + '<p class="product_ie">' + json.data[i].details + '</p></li>';
+
+        if ($('.BoxLeft').height() < $('.BoxRight').height()) {
+            $('.BoxLeft').append(chtml);
+        } else {
+            $('.BoxRight').append(chtml);
+        }
+    }
+</script>
+</body>
+</html>

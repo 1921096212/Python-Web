@@ -1,0 +1,55 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+    登录
+{% endblock %}
+
+{% block link %}
+    <link rel="stylesheet" href="{% static 'css/authPro/auth.css' %}">
+{% endblock %}
+
+{% block main %}
+    <main id="container">
+        <div class="login-contain">
+            {#            <div class="top-contain">#}
+            {#                <h4 class="please-login">请登录</h4>#}
+            {#                <a href="{% url 'user:register' %}" class="register">立即注册 &gt;</a>#}
+            {#            </div>#}
+            <legend>
+                登录
+            </legend>
+            <form action="" method="post" class="form-contain">
+                {#                {% csrf_token %}#}
+                <div class="form-item">
+                    <input type="text" placeholder="请输入用户名或手机号码" name="telephone" class="form-control"
+                           autocomplete="off">
+                </div>
+                <div class="form-item">
+                    <input type="password" placeholder="密码" name="password" class="form-control">
+                </div>
+                <div class="form-item clearfix">
+                    <label>
+                        <input type="checkbox" name="remember">
+                        <span class="forget-password">记住我</span>
+                    </label>
+                    <a href="javascript:void(0);" class="forget-password">忘记密码?</a>
+                </div>
+                <div class="form-login">
+                    <input type="submit" value="Sign In" class="login-btn">
+                </div>
+            </form>
+        </div>
+        <div class="footer">
+            <p>
+                没有帐户?
+                <a href="{% url 'user:register' %}">现在创建一个</a>
+            </p>
+        </div>
+    </main>
+{% endblock %}
+{% block footer %}
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/user/login.js' %}"></script>
+{% endblock %}
